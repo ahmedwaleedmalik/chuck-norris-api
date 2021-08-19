@@ -2,6 +2,7 @@ package util
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -13,17 +14,26 @@ func JSONResponse(w http.ResponseWriter, status int, payload interface{}) {
 	response, err := json.Marshal(payload)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		_, err = w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
 
 	// Return JSON response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	w.Write([]byte(response))
+	_, err = w.Write([]byte(response))
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func MethodNotAllowed(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusMethodNotAllowed)
-	w.Write([]byte(methodNotAllowedError))
+	_, err := w.Write([]byte(methodNotAllowedError))
+	if err != nil {
+		log.Println(err)
+	}
 }

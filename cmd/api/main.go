@@ -18,6 +18,9 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Close connection to the database
+	defer db.Close()
+
 	// Create new Banter Service Instance
 	configService := banter.NewBanterService(db)
 

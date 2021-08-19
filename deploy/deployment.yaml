@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: chuck-norris-api
+  name: chuck-norris-api
+spec:
+  selector:
+    matchLabels:
+      app: chuck-norris-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: chuck-norris-api
+    spec:
+      containers:
+      - name: chuck-norris-api
+        image: ahmedwaleedmalik/chuck-norris-api:v0.0.1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: SQL_SERVER_URL
+          valueFrom:
+            secretKeyRef:
+              name: api-config
+              key: SQL_SERVER_URL
+        - name: SQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: api-config
+              key: SQL_USERNAME
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-config
+              key: SQL_PASSWORD
+        - name: SQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: api-config
+              key: SQL_DATABASE
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 20m
+            memory: 64Mi
+          requests:
+            cpu: 20m
+            memory: 64Mi
+      serviceAccountName: chuck-norris-api

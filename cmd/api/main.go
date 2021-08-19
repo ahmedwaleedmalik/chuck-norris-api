@@ -6,6 +6,7 @@ import (
 
 	"github.com/ahmedwaleedmalik/chuck-norris-api/internal/services/banter"
 	"github.com/ahmedwaleedmalik/chuck-norris-api/internal/services/database"
+	"github.com/ahmedwaleedmalik/chuck-norris-api/internal/services/health"
 )
 
 const defaultServingPort = "8080"
@@ -22,10 +23,16 @@ func main() {
 	defer db.Close()
 
 	// Create new Banter Service Instance
-	configService := banter.NewBanterService(db)
+	banterService := banter.NewBanterService(db)
 
 	// Register Endpoints for Banter Service
-	configService.RegisterBanterServiceEndpoints()
+	banterService.RegisterBanterServiceEndpoints()
+
+	// Create new Health Service Instance
+	healthService := health.NewHealthService(db)
+
+	// Register Endpoints for Health Service
+	healthService.RegisterHealthServiceEndpoints()
 
 	// Start serving the http server
 	log.Printf("HTTP server listening on %v", defaultServingPort)

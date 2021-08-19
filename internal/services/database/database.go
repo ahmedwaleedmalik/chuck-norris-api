@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/ahmedwaleedmalik/chuck-norris-api/internal/models"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
@@ -49,6 +50,8 @@ func InitializeDatabase() (*gorm.DB, error) {
 
 	log.Printf("Connection to database %s was successful!", config.database)
 
+	// Migrate the schema
+	db = db.AutoMigrate(&models.Joke{})
 	return db, err
 }
 

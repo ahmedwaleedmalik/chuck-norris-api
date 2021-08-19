@@ -1,12 +1,12 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 const (
@@ -30,7 +30,7 @@ type config struct {
 }
 
 // InitializeDatabase initializes the database connection
-func InitializeDatabase() (*sql.DB, error) {
+func InitializeDatabase() (*gorm.DB, error) {
 
 	// Load database configuration
 	config, err := loadDatabaseConfig()
@@ -42,7 +42,7 @@ func InitializeDatabase() (*sql.DB, error) {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true", config.username, config.password, config.serverURL, config.database)
 
 	// Connect to database
-	db, err := sql.Open("mysql", connectionString)
+	db, err := gorm.Open("mysql", connectionString)
 	if err != nil {
 		log.Fatal(err)
 	}

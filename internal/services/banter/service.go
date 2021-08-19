@@ -1,12 +1,13 @@
 package banter
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 	"sync"
 
+	"github.com/ahmedwaleedmalik/chuck-norris-api/internal/models"
 	"github.com/ahmedwaleedmalik/chuck-norris-api/pkg/util"
+	"github.com/jinzhu/gorm"
 )
 
 const banterEndpoint = "/banter"
@@ -16,11 +17,11 @@ type banterService struct {
 	sync.RWMutex
 
 	// db is a client that holds the connection to database
-	db *sql.DB
+	db *gorm.DB
 }
 
 // NewBanterService Returns new banterService
-func NewBanterService(db *sql.DB) *banterService {
+func NewBanterService(db *gorm.DB) *banterService {
 	return &banterService{
 		db: db,
 	}
@@ -35,6 +36,13 @@ func (c *banterService) RegisterBanterServiceEndpoints() {
 func (c *banterService) list(w http.ResponseWriter, r *http.Request) {
 	log.Printf("REST request to list all jokes\n")
 
+	c.Lock()
+
+	var jokes []models.Joke
+	c.db.Find(&jokes)
+
+	c.Unlock()
+
 	// Respond with appropriate status code and payload as JSON
-	util.JSONResponse(w, http.StatusOK, nil)
+	util.JSONResponse(w, http.StatusOK, jokes)
 }

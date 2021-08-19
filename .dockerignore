@@ -1,0 +1,12 @@
+### Git ###
+.git*
+
+### GitHub Actions ###
+/.github/
+
+# Dependency directories
+.local
+
+# Binaries for program
+/bin/
+/api

@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
 	// Environment Variables for database configuration
-	serverURLEnv = "SERVER_URL"
-	usernameEnv  = "USERNAME"
-	passwordEnv  = "PASSWORD"
-	databaseEnv  = "DATABASE"
+	serverURLEnv = "SQL_SERVER_URL"
+	usernameEnv  = "SQL_USERNAME"
+	passwordEnv  = "SQL_PASSWORD"
+	databaseEnv  = "SQL_DATABASE"
 
 	// Default values for database configuration
 	defaultServerURL = "localhost:3306"
@@ -69,7 +71,7 @@ func loadDatabaseConfig() (config, error) {
 	// Retrieve passwordEnv from environment variables
 	config.password = os.Getenv(passwordEnv)
 	if len(config.password) == 0 {
-		panic(passwordEnv + " environment variable not set")
+		log.Fatal(passwordEnv + " environment variable not set")
 	}
 
 	// Retrieve serverURL from environment variables

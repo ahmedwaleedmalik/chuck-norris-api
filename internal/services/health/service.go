@@ -1,6 +1,7 @@
 package health
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/jinzhu/gorm"
@@ -34,15 +35,24 @@ func (c *healthService) readiness(w http.ResponseWriter, r *http.Request) {
 	err := c.db.DB().Ping()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Database is not connected"))
+		_, err := w.Write([]byte("Database is not connected"))
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
+	_, err = w.Write([]byte("OK"))
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 // liveness handler returns 200 if the endpoint is accessible
 func (c *healthService) liveness(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
+	_, err := w.Write([]byte("OK"))
+	if err != nil {
+		log.Println(err)
+	}
 }

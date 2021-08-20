@@ -12,19 +12,22 @@ import (
 
 const (
 	// Environment Variables for database configuration
-	serverURLEnv = "SQL_SERVER_URL"
+	sqlHostEnv = "SQL_HOST"
+	sqlPortEnv = "SQL_PORT"
 	usernameEnv  = "SQL_USERNAME"
 	passwordEnv  = "SQL_PASSWORD"
 	databaseEnv  = "SQL_DATABASE"
 
 	// Default values for database configuration
-	defaultServerURL = "localhost:3306"
+	defaultSqlHost = "localhost"
+	defaultSqlPort = "3306"
 	defaultUsername  = "root"
 	defaultDatabase  = "banter"
 )
 
 type config struct {
-	serverURL string
+	serverHost string
+	serverPort string
 	username  string
 	password  string
 	database  string
@@ -40,7 +43,7 @@ func InitializeDatabase() (*gorm.DB, error) {
 	}
 
 	// Create connection string
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true", config.username, config.password, config.serverURL, config.database)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true", config.username, config.password, config.serverHost, config.serverPort, config.database)
 
 	// Connect to database
 	db, err := gorm.Open("mysql", connectionString)
@@ -59,10 +62,16 @@ func InitializeDatabase() (*gorm.DB, error) {
 func loadDatabaseConfig() (config, error) {
 	config := config{}
 
-	// Retrieve serverURL from environment variables
-	config.serverURL = os.Getenv(serverURLEnv)
-	if len(config.serverURL) == 0 {
-		config.serverURL = defaultServerURL
+	// Retrieve serverHost from environment variables
+	config.serverHost = os.Getenv(sqlHostEnv)
+	if len(config.serverHost) == 0 {
+		config.serverHost = defaultSqlHost
+	}
+
+	// Retrieve serverPort from environment variables
+	config.serverPort = os.Getenv(sqlPortEnv)
+	if len(config.serverPort) == 0 {
+		config.serverPort = defaultSqlPort
 	}
 
 	// Retrieve username from environment variables

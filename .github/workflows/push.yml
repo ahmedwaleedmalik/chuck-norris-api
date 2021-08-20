@@ -77,7 +77,9 @@ jobs:
     - name: Update Deployment Image
       env:
         VERSION: ${{ steps.generate_tag.outputs.new_tag }}
-      run: make update-deployment-image
+      run: |
+        VERSION=$(echo ${{ env.VERSION }} | sed 's/v//g')
+        make update-deployment-image
 
     # Commit back changes
     - name: Commit files
@@ -87,7 +89,7 @@ jobs:
         git status 
         git add .
         git commit -m "[skip-ci] Update artifacts" -a
-        
+
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:

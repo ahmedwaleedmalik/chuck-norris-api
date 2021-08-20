@@ -19,11 +19,10 @@ spec:
         image: ahmedwaleedmalik/chuck-norris-api:v0.0.1
         imagePullPolicy: IfNotPresent
         env:
-        - name: SQL_SERVER_URL
-          valueFrom:
-            secretKeyRef:
-              name: api-config
-              key: SQL_SERVER_URL
+        - name: SQL_HOST
+          value: "mysql"
+        - name: SQL_PORT
+          value: "3313"
         - name: SQL_USERNAME
           valueFrom:
             secretKeyRef:

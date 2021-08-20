@@ -8,8 +8,8 @@ This is a sample application using the [chuck-norris-api](https://api.chucknorri
 
 ### Dependencies
 
-- `net/http` stdlib is used for the http server and routing for the sake of simplicity.
-- `GORM`, an ORM library for Golang, is used for interacting with the MYSQL database.
+1. `net/http` stdlib is used for the http server and routing for the sake of simplicity.
+2. `GORM`, an ORM library for Golang, is used for interacting with the MYSQL database.
 
 ### Endpoints
 
@@ -31,7 +31,7 @@ The following tables lists the configurable parameters for the application and t
 
 **NOTE:** The `SQL_PASSWORD` parameter has no default value for security reasons.
 
-## Logging strategy
+### Logging strategy
 
 Following [12 factor app](https://12factor.net) methodologies, we will rely on `stdout` for logs of this application.
 
@@ -47,8 +47,8 @@ As a best practice, we are not using default port `3306` for the SQL server and 
 
 ### Requirements
 
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
-- [minikube](https://minikube.sigs.k8s.io/docs/start/)
+1. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+2. [minikube](https://minikube.sigs.k8s.io/docs/start/)
 
 ### Deploy
 
@@ -77,7 +77,3 @@ Else, you can run `make deploy` to just deploy the application without creating 
 
 - Run `docker-compose up -d` to start the local development environment i.e. mysql; the backing service
 - Run `SQL_PASSWORD=root make run` to run the application that serves on port 8080
-
-### Test
-
-[WIP]

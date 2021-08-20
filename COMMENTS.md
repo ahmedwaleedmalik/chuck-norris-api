@@ -8,7 +8,7 @@ Wanted to keep the architecture as simple as possible and tried to use least amo
 
 In future, we can use something like [liquibase](https://www.liquibase.org/) to make sure that the database is in the right state. Although it's preferred for schematic changes but we can maybe insert dummy data using that as well.
 
-For now, we just check if the database is empty and then add dummy values into it.
+For now, we just check if the database is empty and then add dummy values into it. We could have also directly retrieved the jokes from the REST API and inserted them into the database.
 
 ## Testing
 

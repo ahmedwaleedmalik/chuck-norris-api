@@ -12,25 +12,25 @@ import (
 
 const (
 	// Environment Variables for database configuration
-	sqlHostEnv = "SQL_HOST"
-	sqlPortEnv = "SQL_PORT"
-	usernameEnv  = "SQL_USERNAME"
-	passwordEnv  = "SQL_PASSWORD"
-	databaseEnv  = "SQL_DATABASE"
+	sqlHostEnv  = "SQL_HOST"
+	sqlPortEnv  = "SQL_PORT"
+	usernameEnv = "SQL_USERNAME"
+	passwordEnv = "SQL_PASSWORD"
+	databaseEnv = "SQL_DATABASE"
 
 	// Default values for database configuration
-	defaultSqlHost = "localhost"
-	defaultSqlPort = "3306"
-	defaultUsername  = "root"
-	defaultDatabase  = "banter"
+	defaultSqlHost  = "localhost"
+	defaultSqlPort  = "3306"
+	defaultUsername = "root"
+	defaultDatabase = "banter"
 )
 
 type config struct {
 	serverHost string
 	serverPort string
-	username  string
-	password  string
-	database  string
+	username   string
+	password   string
+	database   string
 }
 
 // InitializeDatabase initializes the database connection
@@ -55,7 +55,59 @@ func InitializeDatabase() (*gorm.DB, error) {
 
 	// Migrate the schema
 	db = db.AutoMigrate(&models.Joke{})
+
+	// Add dummy data in the database, if the database is empty
+	var jokes []models.Joke
+	db.Find(&jokes)
+
+	if len(jokes) == 0 {
+		log.Printf("Database is empty, adding dummy data")
+		err = insertDummyData(db)
+	}
+
 	return db, err
+}
+
+// insertDummyData inserts dummy data into the database
+func insertDummyData(db *gorm.DB) error {
+	// Alternate to using transactions can be direct queries like:
+	// db.Exec("INSERT INTO jokes (id, joke) VALUES (1, 'Chuck Norris does not dodge bullets, bullets dodge Chuck Norris')")
+
+	// Begin transaction
+	tx := db.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Create(&models.Joke{ID: 1, Joke: "Chuck Norris does not dodge bullets, bullets dodge Chuck Norris"}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err := tx.Create(&models.Joke{ID: 2, Joke: "Once, Chuck Norris held a judge in contempt, while in court."}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Create(&models.Joke{ID: 3, Joke: "Chuck Norris once found a piece of hay in a neelestack."}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Create(&models.Joke{ID: 4, Joke: "Chuck Norris is better than Ash Ketchum because Ash didn't catch all the Pokemon yet."}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Create(&models.Joke{ID: 5, Joke: "Documentaries about Chuck Norris' life can be found in video libraries in the horror section."}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// End transaction and commit changeset
+	return tx.Commit().Error
 }
 
 // loadDatabaseConfig loads the database configuration from environment variables

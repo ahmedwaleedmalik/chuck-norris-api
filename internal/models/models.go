@@ -2,5 +2,5 @@ package models
 
 type Joke struct {
 	ID   uint   `json:"id" gorm:"primary_key"`
-	Joke string `json:"title"`
+	Joke string `json:"joke"`
 }

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: chuck-norris-api
-        image: ahmedwaleedmalik/chuck-norris-api:vv0.0.3
+        image: ahmedwaleedmalik/chuck-norris-api:v0.0.3
         imagePullPolicy: IfNotPresent
         env:
         - name: SQL_HOST

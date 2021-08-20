@@ -9,7 +9,6 @@ spec:
     app: chuck-norris-api
   ports:
     - protocol: TCP
-      nodePort: 30876
       port: 80
       targetPort: 8080
-  type: NodePort
+  type: ClusterIP

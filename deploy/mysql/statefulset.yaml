@@ -1,29 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-  labels:
-    app: mysql
-spec:
-  ports:
-    - port: 3306
-  selector:
-    app: mysql
-    tier: mysql
-  clusterIP: None
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql
-  labels:
-    app: mysql
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -54,6 +28,10 @@ spec:
             secretKeyRef:
               name: mysql-config
               key: password
+        - name: MYSQL_DATABASE
+          value: "banter"
+        - name: MYSQL_TCP_PORT
+          value: "3313"
         ports:
         - containerPort: 3313
           name: mysql

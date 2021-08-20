@@ -1,4 +1,4 @@
-.PHONY: all test clean
+.PHONY: all test deploy clean
 SHELL= /bin/bash
 
 # Image URL to use all building/pushing image targets
@@ -47,5 +47,8 @@ release: docker-build docker-push update-deployment-image
 	@echo "Release successful"
 
 # Deploy latest changes to a cluster
-deploy: release
+deploy:
 	bash scripts/deploy.sh
+
+# Create a release and deploy latest changes to a cluster
+release-and-deploy: release deploy

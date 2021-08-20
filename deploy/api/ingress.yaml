@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chuck-norris-api
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Exact
+        # We are only exposing the public endpoint `banter`
+        path: "/banter"
+        backend:
+          service:
+            name: chuck-norris-api
+            port:
+              number: 8080

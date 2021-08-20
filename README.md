@@ -43,6 +43,30 @@ Deployment is divided into the following components:
 - REST API server that exposes `/banter` endpoint to retrieve list of all jokes from the storage server
 - Reverse proxy that serves the REST API server
 
+As a best practice, we are not using default port `3306` for the SQL server and instead relying on `3313` as the serving port.
+
+### Requirements
+
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+- [minikube](https://minikube.sigs.k8s.io/docs/start/)
+
+### Deploy
+
+For end-to-end deployment, run `make release-and-deploy` this command will:
+
+- Build image against latest code
+- Push image to remote registry
+- Update image reference in [deployment](./deploy/api/deployment.yaml)
+- Run deployment script, which performs the following action
+  - Ensure that kubectl and minikube are installed. This script will install them automatically on "linux-gnu" OS.
+  - Start a minikube cluster
+  - Deploy nginx-ingress
+  - Deploy MYSQL
+  - Deploy the REST API server
+  - Print out the URL to access the application
+
+Else, you can run `make deploy` to just deploy the application without creating a new release(build, push docker image)
+
 ## Local Development
 
 ### Requirements

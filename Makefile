@@ -1,3 +1,6 @@
+.PHONY: all test clean
+SHELL= /bin/bash
+
 # Image URL to use all building/pushing image targets
 VERSION ?= 0.0.1
 IMAGE_TAG_BASE ?= ahmedwaleedmalik/chuck-norris-api
@@ -33,7 +36,7 @@ docker-push:
 
 # Update image value in deployment
 update-deployment-image: 
-	sed -i "s@image:.*@image: $(IMG)@" deploy/deployment.yaml
+	sed -i "s@image:.*@image: $(IMG)@" deploy/api/deployment.yaml
 
 # Deploy application to kubernetes
 deploy-manifests:
